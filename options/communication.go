@@ -1,8 +1,8 @@
-package main
+package options
 
 import "fmt"
 
-func presentOptions() {
+func PresentOptions() {
 	fmt.Println("Welcome to Mantse Bank")
 	fmt.Println("What do you want to do?")
 	fmt.Println("1. Check balance")

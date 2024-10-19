@@ -2,18 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
+
+	fileops "example.com/bank/fileops"
+	options "example.com/bank/options"
 )
 
 const afile = "balance.txt" // Fixed filename
 
-func balanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	os.WriteFile(afile, []byte(balanceText), 0644)
-}
-
 func main() {
-	accountBalance, err := getFromFile(afile)
+	accountBalance, err := fileops.GetFromFile(afile)
 
 	if err != nil {
 		fmt.Println("ERROR")
@@ -23,7 +20,7 @@ func main() {
 	}
 
 	for {
-		presentOptions()
+		options.PresentOptions()
 		var choice int
 		fmt.Print("Select: ")
 		fmt.Scan(&choice)
@@ -43,7 +40,7 @@ func main() {
 
 			accountBalance += depositAmount
 			fmt.Println("Balance updated: ", accountBalance)
-			balanceToFile(accountBalance)
+			fileops.ValueToFile(accountBalance, afile)
 		case 3:
 			fmt.Println("Withdraw amount: ")
 			var withdrawAmount float64
@@ -61,7 +58,8 @@ func main() {
 
 			accountBalance -= withdrawAmount
 			fmt.Println("New Balance", accountBalance)
-			balanceToFile(accountBalance)
+			fileops.ValueToFile(accountBalance, afile)
+
 		default:
 			fmt.Println("Goodbye")
 			return

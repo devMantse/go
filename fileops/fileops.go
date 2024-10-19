@@ -1,12 +1,13 @@
-package main
+package fileops
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 )
 
-func getFromFile(fileName string) (float64, error) {
+func GetFromFile(fileName string) (float64, error) {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		return 1000, errors.New("failed to find value from file")
@@ -20,4 +21,9 @@ func getFromFile(fileName string) (float64, error) {
 	}
 
 	return value, nil
+}
+
+func ValueToFile(value float64, fileName string) {
+	valueText := fmt.Sprint(value)
+	os.WriteFile(fileName, []byte(valueText), 0644)
 }
