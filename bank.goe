@@ -1,0 +1,103 @@
+package main
+
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+const afile = "balance.text"
+
+func getFromFile() (float64, error) {
+	data, err := os.ReadFile(afile)
+
+	if err != nil {
+		return 1000, errors.New("failed to find balance")
+	}
+
+	balanceText := string(data)
+	balance, err := strconv.ParseFloat(balanceText, 64)
+
+	if err != nil {
+		return 1000, errors.New("failed to pass")
+	}
+
+	return balance, nil
+
+}
+
+func balanceToFile(balance float64) {
+	balanceText := fmt.Sprint(balance)
+	os.WriteFile(afile, []byte(balanceText), 0644)
+}
+
+func main() {
+
+	var accountBanlance, err = getFromFile()
+
+	if err != nil {
+		fmt.Println("ERROR")
+		fmt.Println(err)
+		fmt.Println("-------")
+		panic(err)
+
+	}
+
+	for {
+
+		fmt.Println("Welcome to Mantse Bank")
+		fmt.Println("What do you want to do?")
+		fmt.Println("1. Check balance")
+		fmt.Println("2. Deposit Money ")
+		fmt.Println("3. Withdraw money")
+		fmt.Println("4. Exit")
+
+		var choice int
+		fmt.Print("Select: ")
+		fmt.Scan(&choice)
+
+		switch choice {
+		case 1:
+			fmt.Println("Balance is: ", accountBanlance)
+		case 2:
+			fmt.Println("Deposit: ")
+			var depositeAmnt float64
+			fmt.Scan(&depositeAmnt)
+
+			if depositeAmnt <= 0 {
+				fmt.Println("Invalid amount!")
+				continue
+			}
+
+			accountBanlance += depositeAmnt
+
+			fmt.Println("Balance updated: ", accountBanlance)
+			balanceToFile(float64(accountBanlance))
+		case 3:
+			fmt.Println("Withdraw amount: ")
+			var withdrawAmnt float64
+			fmt.Scan(&withdrawAmnt)
+
+			if withdrawAmnt <= 0 {
+				fmt.Println("must be greater than 0 ")
+				continue
+			}
+
+			if withdrawAmnt > float64(accountBanlance) {
+				fmt.Println("more than balance")
+				continue
+			}
+
+			accountBanlance -= withdrawAmnt
+			fmt.Println("New Balance", accountBanlance)
+			balanceToFile(float64(accountBanlance))
+
+		default:
+			fmt.Println("Goodbye")
+			return
+
+		}
+	}
+
+}
